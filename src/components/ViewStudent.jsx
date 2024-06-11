@@ -1,43 +1,50 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from './NavBar'
+import axios from 'axios'
 
 const ViewStudent = () => {
-    const [data,setData]=useState(
-[
-    {"name":"lakshmi","adms":101},
-    {"name":"anu","adms":102},
-    {"name":"maya","adms":103},
-]
-    )
+    const [data,setData]=useState([])
+    const fetchData=()=>{
+      axios.get("http://localhost:8083/view").then(
+        (response)=>{
+          setData(response.data)
+        }
+      ).catch().finally()
+    }
+    useEffect(()=>{fetchData()},[])
   return (
     <div>
         <NavBar/>
-        <div className="container">
-            <center><h1><b>STUDENT DETAILS</b></h1></center>
-            <div className="row">
-                <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
-                    <div className="row">
-                       {data.map (
-                        (value, index) => {
-                            return  <div className="col col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3 col-xxl-3">
-                            <div class="card">
-      <img src="https://img.freepik.com/free-photo/cute-girl-with-schoolbag_144627-26608.jpg" height="250px"class="card-img-top" alt="..."/>
-      <div class="card-body">
-        <h5 class="card-title">{value.name}</h5>
-        <p class="card-text">{value.adms}</p>
-        <a href="#" class="btn btn-primary">DETAILS</a>
-      </div>
-    </div>
-                            </div>
-                        }
-                       )
+       <div className="container">
+        <div className="row">
+            <div className="col col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+            <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">NAME</th>
+      <th scope="col">ROLL NO</th>
+      <th scope="col">ADM NO</th>
+      <th scope="col">COLLEGE</th>
+    </tr>
+  </thead>
+  <tbody>
+    {data.map(
+        (value, index)=>{
+            return <tr>
+            <td>{value.name}</td>
+            <td>{value.rollno}</td>
+            <td>{value.admno}</td>
+            <td>{value.college}</td>
+          </tr>
+        }
+    )
 
-                       }
-                      
-                    </div>
-                </div>
+    }
+  </tbody>
+</table>
             </div>
         </div>
+       </div>
     </div>
   )
 }
